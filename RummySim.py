@@ -4,19 +4,22 @@ from collections import Counter
 from openpyxl import load_workbook, Workbook
 import os, sys
 
-class Card(rank,suite):
+class Card():
 	def __init__(self,rank,suite):
 		self._rank = rank
 		self._suite = suite
-		self.value = determineCardValue()
+		self.value = self.determineCardValue()
 
 	def determineCardValue(self):
-		if 2 <= self._rank <= 9:
-			self.value = 5
-		elif self._rank == 'A':
-			self.value = 15:
+		if self._rank == 'A':
+			self.value = 15
 		elif self._rank == 10 or self._rank == 'J' or self._rank == 'Q' or self._rank == 'K':
 			self.value = 10
+		elif 2 <= self._rank <= 9:
+			self.value = 5
+
+	def getCardID(self):
+		print(f"{self._rank} of {rank._suite}")
 
 class cardDeck():
 	def __init__(self):
@@ -24,9 +27,8 @@ class cardDeck():
 		self.suites = ['Spades', 'Diamonds', 'Clubs', "Hearts"]
 		self.deck = []
 		for i in range(0,len(self.suites)-1):
-			deck.append(Card(self.suites[i]))
 			for j in range(0,len(self.ranks)):
-				self.deck[i].ranks = self.ranks[j]
+				self.deck.append(Card(self.ranks[j],self.suites[i]))
 
 	#algorithmically randomizes shuffle
 	def basicRandomizedShuffle(self):
@@ -48,7 +50,7 @@ class cardDeck():
 			j = j - 1
 
 #player strategies should go in this class as well
-class CardPlayer(name):
+class CardPlayer():
 	def __init__(self,name):
 		self.score = 0
 		self._name = name
@@ -96,7 +98,7 @@ class RummySim():
 			playerName = input()
 			self.table.append(CardPlayer(playerName))
 
-		self.deck = cardDeck()
+		self.deckOfCards = cardDeck()
 		self.discardPile = []
 		self.finalGameScores = []
 		self.gameInProgress = True
@@ -115,19 +117,20 @@ class RummySim():
 	#assuming the first card is the top card
 	def deal(self,numberOfCards,nameOfPlayer):
 		i = 1
-		playerInQuestion = getPlayerIndex(nameofPlayer)
-		while i <= numberOfCards:
-			self.table[playerInQuestion].append(self.deck[0])
-			self.deck.remove(0)
+		playerInQuestion = self.getPlayerIndex(nameOfPlayer)
+		while i <= len(self.table):
+			self.table[playerInQuestion].cardsInHand.append(self.deckOfCards.deck[0])
+			self.deckOfCards.deck.remove(0)
 			i = i + 1
 
 	#assuming the top is the first card
 	def setupGame(self):
 		i = 1
-		while i <= playersInRound:
-			deal(7,self.table[i].cardsInHand.append(self.deck[0]))
-			self.discardPile.append(self.deck[0])
-			self.deck.remove(0)
+		while i <= len(self.table):
+			print(type(self.deckOfCards.deck))
+			self.deal(7,self.table[i].cardsInHand.append(self.deckOfCards.deck[0]))
+			self.discardPile.append(self.deckOfCards.deck[0])
+			self.deckOfCards.deck.remove(0)
 
 	def recordGameFlowToXl(self,data,filepath):
 		return None
@@ -135,13 +138,15 @@ class RummySim():
 	def writeScoresToXl(self,data,filepath):
 		return None
 
-	def play():
-		while self.gameInProgess:
-			setupGame()
+	def play(self):
+		while self.gameInProgress:
+			self.setupGame()
+
+			print("Game in progress.  Put in game code logic here.")
 
 			i = 0
 			#maybe consider designing this to be a linked list instead of just numerating and using modular arithmetic
-			while !self.table[i].playerOut():
+			while not self.table[i].playerOut():
 				print("Game is in progress")
 				#develop game logic here
 				#check again for any players who have gone out after their game
@@ -167,7 +172,7 @@ class RummySim():
 					i = (i+1)%len(self.table)
 
 def main():
-	rummy = RummySim()
+	rummy = RummySim(4)
 	rummy.play()
 
 main()
